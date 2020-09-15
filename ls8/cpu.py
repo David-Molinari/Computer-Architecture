@@ -9,7 +9,7 @@ class CPU:
         """Construct a new CPU."""
         self.pc = 0
         self.reg = [0] * 8
-        self.ram = {}
+        self.ram = [0] * 256
 
 
     def load(self):
@@ -70,5 +70,22 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        IR = self.ram_read(self.pc)
-        
+
+        operand_a = self.ram_read(self.pc + 1)
+        operand_b = self.ram_read(self.pc + 2)
+        running = True
+
+        while running == True:
+            IR = self.ram_read(self.pc)
+            if IR == 130:
+                self.reg[operand_a] = operand_b
+                self.pc = self.pc + 3
+            elif IR == 1:
+                break
+            elif IR == 71:
+                print(self.reg[operand_a])
+                self.pc = self.pc + 2
+
+cp = CPU()
+cp.load()
+cp.run()
